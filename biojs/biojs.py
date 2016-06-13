@@ -14,3 +14,12 @@ class msa(widgets.DOMWidget):
     def importURL(self, url):
         print("Importing from the given URL")
         self.url = url
+
+
+class fasta(widgets.DOMWidget):
+    _view_module = Unicode('nbextensions/biojs/fasta_widget').tag(sync=True)
+    _view_name = Unicode('fastaView').tag(sync=True)
+    url = Unicode('').tag(sync=True)
+
+    def read(self, url):
+        self.url = url
