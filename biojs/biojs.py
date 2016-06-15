@@ -30,6 +30,9 @@ class fasta(widgets.DOMWidget):
         self.url = url
 
 
+
+# cytoscape Section
+
 class cytoscapeWidget(widgets.DOMWidget):
     _view_module = Unicode('nbextensions/biojs/cytoscape_widget').tag(sync=True)
     _view_name = Unicode('cytoscapeView').tag(sync=True)
@@ -49,10 +52,8 @@ class cytoscape():
         self.init_widget()
 
     def init_widget(self):
-        print('widget created')
-        #self.widget.options = self.options
+        self.widget.options = self.options
 
     def plot(self):
-        print(self.widget.div_id)
         self.widget.options = self.options # To check if anything has changed
         display(self.widget)
