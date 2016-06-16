@@ -10,7 +10,7 @@ class msaWidget(widgets.DOMWidget):
     div_id = Unicode('').tag(sync=True)
     seqs = List([]).tag(sync=True)
     #js_seqs = List([]).tag(sync=True)
-    url = Unicode('')
+    url = Unicode('').tag(sync=True)
 
 
     def plot(self):
