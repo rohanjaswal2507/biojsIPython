@@ -4,12 +4,13 @@ from traitlets import Unicode, List, Dict
 from IPython.display import display
 
 
-class msa(widgets.DOMWidget):
+class msaWidget(widgets.DOMWidget):
     _view_module = Unicode("nbextensions/biojs/msa_widget").tag(sync=True)
     _view_name = Unicode('msaView').tag(sync=True)
-    seqs = List([]).tag(sync=True)   #Needs to be changed because seqs should be a list
+    div_id = Unicode('').tag(sync=True)
+    seqs = List([]).tag(sync=True)
     #js_seqs = List([]).tag(sync=True)
-    url = Unicode('').tag(sync=True)
+    url = Unicode('')
 
 
     def plot(self):
@@ -20,6 +21,24 @@ class msa(widgets.DOMWidget):
         print("Importing from the given URL")
         self.url = url
 
+class msa():
+    seqs = []
+    url = ''
+
+    def __init__(self):
+        self.widget = msaWidget()
+        self.widget.div_id = str(int((random.random()*100000)/10))
+
+    def plot(self):
+        print("Plotting")
+        display(self.widget)
+
+    def importURL(self, url):
+        self.url = url
+        self.widget.url = url
+
+
+# Fasta Section
 
 class fasta(widgets.DOMWidget):
     _view_module = Unicode('nbextensions/biojs/fasta_widget').tag(sync=True)
@@ -28,7 +47,6 @@ class fasta(widgets.DOMWidget):
 
     def read(self, url):
         self.url = url
-
 
 
 # cytoscape Section

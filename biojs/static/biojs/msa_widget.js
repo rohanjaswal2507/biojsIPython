@@ -12,16 +12,19 @@ define(['jquery', 'jupyter-js-widgets', 'msa'], function ($, widgets, msa){
   // Creating a new instance of MSA
   var m = new msa.msa();
 
+
   var msaView = widgets.DOMWidgetView.extend({
     render : function(){
       //msaView.__super__.render.apply(this, arguments);
       console.log("Rendering the MSA Widget");
-      this.$el.append("<div id='msaDiv'>Displaying the sequence</div>");
+      var divID = this.model.get('div_id');
+      this.$el.append("<div id='" + divID + "'>Displaying the sequence</div>");
       _.bindAll(this, "init_viewer");
 
       // Wait for the element to be added to the DOM
       this.displayed.then(this.init_viewer);
       this.plot();
+      //console.log(this.model.get('seqs'));
     },
 
 
@@ -35,9 +38,14 @@ define(['jquery', 'jupyter-js-widgets', 'msa'], function ($, widgets, msa){
       } else {
         console.warn("Could not create an instance of MSA");
       }
-      m.el = document.getElementById('msaDiv');
+      m.el = document.getElementById(this.model.get('div_id'));
 
-      var seqs = this.model.get('js_seqs');
+      var seqs = this.model.get('seqs');
+      var url = this.model.get('url');
+      if (url){
+        this.importUrl();
+      }
+
 
       //Some listeners
       this.listenTo(this.model, 'change:js_seqs', this.plot);
