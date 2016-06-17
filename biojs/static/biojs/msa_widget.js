@@ -7,10 +7,10 @@ require.config({
     }
 });
 
-define(['jquery', 'jupyter-js-widgets', 'msa'], function ($, widgets, msa){
+define(['jquery', 'underscore', 'jupyter-js-widgets', 'msa'], function ($, _, widgets, msa){
 
   // Creating a new instance of MSA
-  var m = new msa.msa();
+  //var m = new msa.msa();
 
 
   var msaView = widgets.DOMWidgetView.extend({
@@ -18,13 +18,11 @@ define(['jquery', 'jupyter-js-widgets', 'msa'], function ($, widgets, msa){
       //msaView.__super__.render.apply(this, arguments);
       console.log("Rendering the MSA Widget");
       var divID = this.model.get('div_id');
-      this.$el.append("<div id='" + divID + "'>Displaying the sequence</div>");
+      this.$el.append("<div id='" + divID + "' position='relative'>Displaying the sequence</div>");
       _.bindAll(this, "init_viewer");
 
       // Wait for the element to be added to the DOM
       this.displayed.then(this.init_viewer);
-      this.plot();
-      //console.log(this.model.get('seqs'));
     },
 
 
@@ -32,18 +30,22 @@ define(['jquery', 'jupyter-js-widgets', 'msa'], function ($, widgets, msa){
     init_viewer : function(){
       console.log("Updating the view");
 
-      //check if MSA object is created
-      if (!m){
+      //Create a new instance of MSA
+      if(!this.model.get('msaObject')){
         var m = new msa.msa();
+        console.log("New MSA object created!");
       } else {
-        console.warn("Could not create an instance of MSA");
+        var m = this.model.get('msaObject');
       }
+
       m.el = document.getElementById(this.model.get('div_id'));
+      this.model.set('msaObject', m);
 
       var seqs = this.model.get('seqs');
       var url = this.model.get('url');
+      console.log(url);
       if (url){
-        this.importUrl();
+        this.importUrl(this.model.get('msaObject'));
       }
 
 
@@ -59,18 +61,22 @@ define(['jquery', 'jupyter-js-widgets', 'msa'], function ($, widgets, msa){
 
     plot : function(){
       console.log("Plotting the sequence");
+      console.log(this.model.get('msaObject'));
+      var m = this.model.get('msaObject');
       var msa_view = m.render();
       this.$el.append($(msa_view.el));
+      this.model.set('msaObject', m);
     },
 
-    importUrl : function(){
+    importUrl : function(m){
       var url = this.model.get('url');
       m.u.file.importURL(url, function(err, model){
         if(!err){
           console.log("Imported from URL: " + url );
         }
       });
-      this.plot();
+      this.model.set('msaObject', m); //update the model
+      this.plot(m);
     }
 
   });

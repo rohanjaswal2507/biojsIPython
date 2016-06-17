@@ -13,9 +13,6 @@ class msaWidget(widgets.DOMWidget):
     url = Unicode('').tag(sync=True)
 
 
-    def plot(self):
-        print("plotting")
-
 
     def importURL(self, url):
         print("Importing from the given URL")
@@ -30,7 +27,6 @@ class msa():
         self.widget.div_id = str(int((random.random()*100000)/10))
 
     def plot(self):
-        print("Plotting")
         display(self.widget)
 
     def importURL(self, url):
