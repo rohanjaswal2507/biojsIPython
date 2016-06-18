@@ -71,3 +71,26 @@ class cytoscape():
     def plot(self):
         self.widget.options = self.options # To check if anything has changed
         display(self.widget)
+
+
+# biojs-vis-wigexplorer Section
+# http://biojs.io/d/biojs-vis-wigexplorer
+
+class wigExplorerWidget(widgets.DOMWidget):
+    _view_module = Unicode('nbextensions/biojs/wigexplorer_widget').tag(sync=True)
+    _view_name = Unicode('wigExplorerView').tag(sync=True)
+    options = Dict().tag(sync=True)
+    div_id = Unicode('').tag(sync=True)
+
+class wigExplorer():
+    options = {}
+    widget = wigExplorerWidget()
+
+    def __init__(self, options):
+        self.options = options
+        self.widget.options = self.options
+        self.widget.div_id = 'div' + str(int((random.random()*100000)))
+
+
+    def plot(self):
+        display(self.widget)
