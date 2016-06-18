@@ -94,3 +94,51 @@ class wigExplorer():
 
     def plot(self):
         display(self.widget)
+
+
+# biojs-vis-sequence Section
+# http://biojs.io/d/biojs-vis-sequence
+
+class SeqWidget(widgets.DOMWidget):
+    _view_module = Unicode('nbextensions/biojs/seq_widget').tag(sync=True)
+    _view_name = Unicode('seqView').tag(sync=True)
+    div_id = Unicode('').tag(sync=True)
+    sequence = Unicode('').tag(sync=True)
+    format = Unicode('').tag(sync=True)
+    annotations = List().tag(sync=True)
+    highlights = List().tag(sync=True)
+
+class Seq():
+    options = {}
+    sequence = ''
+    annotations = []
+    highlights = []
+    format = ''
+
+    def __init__(self, options):
+        self.options = options
+        self.widget = SeqWidget()
+        self.widget.div_id = 'div' + str(int((random.random()*100000)))
+        if 'sequence' in options.keys():
+            self.sequence = options['sequence']
+        if 'annotations' in options.keys():
+            self.annotations = self.annotations + options['annotations']
+        if 'highlights' in options.keys():
+            self.annotations = self.annotations + options['highlights']
+        if 'format' in options.keys():
+            self.format = options['format']
+
+    def plot(self):
+        self.widget.annotations = self.annotations
+        self.widget.highlights = self.highlights
+        self.widget.format = self.format
+        self.widget.sequence = self.sequence
+        display(self.widget)
+
+    def addAnnotation(self, options):
+        self.annotations = self.annotations + options
+        self.widget.annotations = self.annotations
+
+    def addHighlight(self, options):
+        self.highlights = self.highlights + options
+        self.widget.highlights = self.highlights
